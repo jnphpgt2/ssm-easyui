@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.jnan.mapper.GradeMapper" >
+	<select id="getList" parameterType="map" resultType="grade">
+		SELECT * from grade limit #{index},#{rows} 
+	</select>
+	<select id="getListCount" resultType="int">
+		SELECT count(gid) from grade
+	</select>
+	<select id="getGradeTypeList" resultType="grade" >
+		SELECT * from grade
+	</select>
+	<insert id="add" parameterType="grade">
+		insert into grade(gname) values(#{gname})
+	</insert>
+	<update id="update" parameterType="grade">
+		update grade set gname=#{gname} where gid=#{gid}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from grade where gid=#{gid}
+	</delete>
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.jnan.mapper.StuMapper" >
+<resultMap type="stu" id="li">
+	<id column="id" property="id"/>
+	<result column="name" property="name"/>
+	<result column="birthday" property="birthday"/>
+	<association property="grade" javaType="grade">
+		<id column="gid" property="gid"/>
+		<result column="gname"  property="gname"/>
+	</association>
+</resultMap>
+
+	<select id="getList" parameterType="map" resultMap="li">
+		SELECT s.id,s.`name`,s.`birthday`,g.`gname` FROM stu s,grade g WHERE s.`gid`=g.`gid` ORDER BY s.`id` limit #{index},#{rows} 
+	</select>
+	
+<resultMap type="stu" id="li1">
+	<id column="id" property="id"/>
+	<result column="name" property="name"/>
+	<result column="birthday" property="birthday"/>
+	<collection property="courses" ofType="course">
+		<id column="cid" property="cid"/>
+		<result column="cname" property="cname"/>
+		<result column="ptime" property="ptime"/>
+	</collection>
+</resultMap>	
+	<select id="getStuAcou"  resultMap="li1">
+		SELECT stu.*,cou.* FROM stu LEFT JOIN s_c sc ON stu.`id`=sc.`id` LEFT JOIN course cou ON sc.`cid`=cou.`cid`
+	</select>
+	<select id="getListCount" resultType="int">
+		SELECT count(id) from stu
+	</select>
+	
+	<select id="getGrade" resultType="grade">
+		select * from grade
+	</select>
+	<select id="getCourse" resultType="course">
+		select * from course
+	</select>
+	<select id="getStuByName" parameterType="java.lang.String" resultType="stu">
+		select * from stu where name=#{name}
+	</select>
+	<insert id="add" parameterType="stu">
+		insert into stu(name,birthday,gid) values(#{name},#{birthday},#{gid}) 
+	</insert>
+	<insert id="addCourse" parameterType="map">
+		insert into s_c values(#{id},#{cid}) 
+	</insert>
+	<delete id="delete" parameterType="int">
+		delete from stu where id=#{id}
+	</delete>
+	<delete id="deleteCourse" parameterType="int">
+		delete from s_c where id=#{id}
+	</delete>
+	<update id="update" parameterType="stu">
+		update stu set name=#{name},birthday=#{birthday},gid=#{gid} where id=#{id}
+	</update>
+</mapper>
